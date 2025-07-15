@@ -233,6 +233,7 @@ const tree4 = {
                   "children": [
                     { "name": "A1a1i" },
                     { "name": "A1a1ii" },
+                    { "name": "A1a1ii33" },
                   ]
                 }
               ]
@@ -345,8 +346,9 @@ const tree4 = {
 function App() {
 
   
-  const result = layoutTree(testTree, 120, 60);
+  //const result = layoutTree(testTree, 120, 60);
 
+  const result = layoutTree(testTree, 120, 60);
 //   function findY(name, node) {
 //     if (!node.position) {
 //       debugger;
