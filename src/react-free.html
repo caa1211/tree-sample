@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<meta charset="utf-8">
+<body></body>
+<script type="module">
+import * as d3 from "https://cdn.jsdelivr.net/npm/d3@7/+esm";
+
+// ← 替換成 layout() 回傳的結果 ─────────────
+const data = {
+  "name": "root",
+  "children": [
+    {
+      "name": "A",
+      "children": [
+        {
+          "name": "B",
+          "children": [
+            {
+              "name": "C",
+              "position": [
+                360,
+                0
+              ],
+              "children": []
+            },
+            {
+              "name": "D",
+              "position": [
+                360,
+                70
+              ],
+              "children": []
+            },
+            {
+              "name": "E",
+              "children": [
+                {
+                  "name": "F",
+                  "position": [
+                    480,
+                    140
+                  ],
+                  "children": []
+                },
+                {
+                  "name": "G",
+                  "position": [
+                    480,
+                    210
+                  ],
+                  "children": []
+                },
+                {
+                  "name": "H",
+                  "children": [
+                    {
+                      "name": "I",
+                      "position": [
+                        600,
+                        280
+                      ],
+                      "children": []
+                    },
+                    {
+                      "name": "J",
+                      "position": [
+                        600,
+                        350
+                      ],
+                      "children": []
+                    }
+                  ],
+                  "position": [
+                    480,
+                    280
+                  ]
+                }
+              ],
+              "position": [
+                360,
+                140
+              ]
+            }
+          ],
+          "position": [
+            240,
+            0
+          ]
+        }
+      ],
+      "position": [
+        120,
+        0
+      ]
+    },
+    {
+      "name": "K",
+      "children": [
+        {
+          "name": "L",
+          "children": [
+            {
+              "name": "M",
+              "position": [
+                360,
+                210
+              ],
+              "children": []
+            },
+            {
+              "name": "N",
+              "position": [
+                360,
+                280
+              ],
+              "children": []
+            }
+          ],
+          "position": [
+            240,
+            70
+          ]
+        },
+        {
+          "name": "O",
+          "children": [
+            {
+              "name": "P",
+              "children": [
+                {
+                  "name": "Q",
+                  "position": [
+                    480,
+                    350
+                  ],
+                  "children": []
+                },
+                {
+                  "name": "R",
+                  "children": [
+                    {
+                      "name": "S",
+                      "position": [
+                        600,
+                        420
+                      ],
+                      "children": []
+                    },
+                    {
+                      "name": "T",
+                      "position": [
+                        600,
+                        490
+                      ],
+                      "children": []
+                    }
+                  ],
+                  "position": [
+                    480,
+                    420
+                  ]
+                }
+              ],
+              "position": [
+                360,
+                350
+              ]
+            }
+          ],
+          "position": [
+            240,
+            140
+          ]
+        }
+      ],
+      "position": [
+        120,
+        70
+      ]
+    }
+  ],
+  "position": [
+    0,
+    0
+  ]
+}
+const width = 900, height = 600;
+
+// 把樹展開成 nodes / links
+const nodes = [], links = [];
+(function walk(n){
+  nodes.push(n);
+  (n.children||[]).forEach(c => { links.push([n,c]); walk(c); });
+})(data);
+
+// SVG
+const svg = d3.select("body")
+  .append("svg")
+  .attr("width", width)
+  .attr("height", height);
+
+// links
+svg.selectAll("line")
+  .data(links)
+  .enter()
+  .append("line")
+  .attr("stroke", "#bbb")
+  .attr("x1", d => d[0].position[0])
+  .attr("y1", d => d[0].position[1])
+  .attr("x2", d => d[1].position[0])
+  .attr("y2", d => d[1].position[1]);
+
+// nodes
+svg.selectAll("rect")
+  .data(nodes)
+  .enter()
+  .append("rect")
+  .attr("x", d => d.position[0]-25)
+  .attr("y", d => d.position[1]-15)
+  .attr("width", 50)
+  .attr("height",30)
+  .attr("rx",6)
+  .attr("fill","#90caf9");
+
+// labels
+svg.selectAll("text")
+  .data(nodes)
+  .enter()
+  .append("text")
+  .attr("x", d => d.position[0])
+  .attr("y", d => d.position[1]+5)
+  .attr("text-anchor","middle")
+  .text(d=>d.name);
+</script>
